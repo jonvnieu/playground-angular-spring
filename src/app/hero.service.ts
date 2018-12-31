@@ -22,13 +22,26 @@ export class HeroService {
     private messageService: MessageService
    ) { }
 
-  /** Get all heroes. */
+  /** GET: Returns all heroes. */
   getHeroes(): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.heroesUrl)
       .pipe(
         tap(_ => this.log('fetched heroes')),
         catchError(this.handleError('getHeroes', []))
        );
+  }
+
+  /** GET: Returns all heroes whose name matches a search term. */
+  searchHeroes(term: string): Observable<Hero[]> {
+    if (!term.trim()) {
+      // nothing to search -> return empty array
+      return of([]);
+    }
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`)
+      .pipe(
+        tap(_ => this.log(`found heroes matching "${term}"`)),
+        catchError(this.handleError<Hero[]>('searchHeroes', []))
+      );
   }
 
   /** GET: Returns the hero by ID. Will 404 if not found. */
