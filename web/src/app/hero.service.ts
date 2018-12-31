@@ -11,7 +11,7 @@ import { Hero } from './hero'
   providedIn: 'root'
 })
 export class HeroService {
-  const httpOptions = {
+  private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
